@@ -6,9 +6,12 @@ from werkzeug.utils import secure_filename
 app = Flask(__name__)
 app.secret_key = 'sannamgo_lost_found_secret_key'
 
+# 파일 업로드 크기 제한 설정 (16MB)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
 # 업로드 폴더 설정
 UPLOAD_FOLDER = 'static/uploads'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -17,6 +20,31 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def save_uploaded_file(file):
+    """파일 업로드 처리 함수"""
+    if file and file.filename:
+        # 파일 확장자 확인
+        if not allowed_file(file.filename):
+            return None
+        
+        # 안전한 파일명 생성
+        filename = secure_filename(file.filename)
+        
+        # 파일명 중복 방지 (타임스탬프 추가)
+        name, ext = os.path.splitext(filename)
+        timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+        filename = f"{name}_{timestamp}{ext}"
+        
+        try:
+            # 파일 저장
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(file_path)
+            return filename
+        except Exception as e:
+            print(f"파일 저장 오류: {e}")
+            return None
+    return None
 
 # 임시 데이터 저장 (실제로는 데이터베이스를 사용해야 함)
 found_items = []
@@ -100,9 +128,7 @@ def register_found():
         if 'image' in request.files:
             file = request.files['image']
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                image = filename
+                image = save_uploaded_file(file)
         
         new_item = {
             'id': len(found_items) + 1,
@@ -132,9 +158,7 @@ def register_lost():
         if 'image' in request.files:
             file = request.files['image']
             if file and allowed_file(file.filename):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                image = filename
+                image = save_uploaded_file(file)
         
         new_item = {
             'id': len(lost_items) + 1,
@@ -226,4 +250,4 @@ def delete_item(item_type, item_id):
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=8080) 
+    app.run(debug=True, host='0.0.0.0', port=5550) 
