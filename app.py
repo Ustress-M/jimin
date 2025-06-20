@@ -9,12 +9,17 @@ app.secret_key = 'sannamgo_lost_found_secret_key'
 # 파일 업로드 크기 제한 설정 (16MB)
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
-# 업로드 폴더 설정
-UPLOAD_FOLDER = 'static/uploads'
+# 업로드 폴더 설정 - 절대 경로 사용
+UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static', 'uploads')
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
 
+# 업로드 폴더가 없으면 생성
 if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
+    try:
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+        print(f"업로드 폴더 생성됨: {UPLOAD_FOLDER}")
+    except Exception as e:
+        print(f"업로드 폴더 생성 실패: {e}")
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -26,6 +31,7 @@ def save_uploaded_file(file):
     if file and file.filename:
         # 파일 확장자 확인
         if not allowed_file(file.filename):
+            print(f"허용되지 않는 파일 형식: {file.filename}")
             return None
         
         # 안전한 파일명 생성
@@ -40,9 +46,13 @@ def save_uploaded_file(file):
             # 파일 저장
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             file.save(file_path)
+            print(f"파일 저장 성공: {file_path}")
             return filename
         except Exception as e:
             print(f"파일 저장 오류: {e}")
+            print(f"업로드 폴더 경로: {app.config['UPLOAD_FOLDER']}")
+            print(f"폴더 존재 여부: {os.path.exists(app.config['UPLOAD_FOLDER'])}")
+            print(f"폴더 쓰기 권한: {os.access(app.config['UPLOAD_FOLDER'], os.W_OK)}")
             return None
     return None
 
@@ -250,4 +260,5 @@ def delete_item(item_type, item_id):
     return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5550) 
+    # 프로덕션 환경에서는 debug=False로 설정
+    app.run(debug=False, host='0.0.0.0', port=5550) 

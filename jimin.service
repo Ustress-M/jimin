@@ -1,0 +1,15 @@
+[Unit]
+Description=Sanamgo Lost and Found Web Application
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/jimin
+Environment=PATH=/home/ubuntu/jimin/vv/bin
+ExecStart=/home/ubuntu/jimin/vv/bin/python3 /home/ubuntu/jimin/app.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target 
