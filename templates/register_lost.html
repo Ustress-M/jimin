@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h3 class="text-center mb-4">분실물 등록</h3>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="image" class="form-label">사진 (선택사항)</label>
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">물건 이름</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="lost_time" class="form-label">분실일시</label>
+                        <input type="datetime-local" class="form-control" id="lost_time" name="lost_time" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="student_id" class="form-label">학번</label>
+                        <input type="text" class="form-control" id="student_id" name="student_id" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="student_name" class="form-label">이름</label>
+                        <input type="text" class="form-control" id="student_name" name="student_name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">분실물 특징</label>
+                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">등록하기</button>
+                        <a href="{{ url_for('index') }}" class="btn btn-secondary ms-2">취소</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

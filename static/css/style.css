@@ -1,0 +1,148 @@
+/* 전체 스타일 */
+body {
+    background-color: #f8f9fa;
+    padding-bottom: 80px; /* 하단 메뉴 공간 확보 */
+}
+
+/* 제목 스타일 */
+h1 {
+    color: #007bff;
+    font-weight: bold;
+}
+
+/* 카드 스타일 */
+.item-card {
+    transition: transform 0.2s;
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* 상태 표시 원 스타일 */
+.status-indicator {
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* 하단 메뉴 스타일 */
+.fixed-bottom {
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+}
+
+.fixed-bottom .btn-link {
+    color: #6c757d;
+    transition: color 0.2s;
+}
+
+.fixed-bottom .btn-link:hover {
+    color: #007bff;
+}
+
+/* 하단 메뉴 아이템 스타일 */
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 8px 4px;
+    min-width: 60px;
+}
+
+/* 하단 메뉴 이모지 스타일 */
+.menu-emoji {
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+    line-height: 1;
+}
+
+/* 하단 메뉴 텍스트 스타일 */
+.menu-text {
+    font-size: 0.65rem;
+    font-weight: 500;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+/* 검색창 스타일 */
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* 페이지네이션 스타일 */
+.pagination .page-link {
+    color: #007bff;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0 15px;
+    }
+    
+    h1 {
+        font-size: 1.5rem;
+    }
+    
+    .item-card img {
+        height: 150px !important;
+    }
+    
+    .menu-emoji {
+        font-size: 1.4rem;
+    }
+    
+    .menu-text {
+        font-size: 0.55rem;
+    }
+    
+    .menu-item {
+        min-width: 45px;
+        padding: 4px 1px;
+    }
+}
+
+.completed-item {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(0.7);
+}
+
+/* 디폴트 이미지 스타일 */
+.card-img-top[src*="default.png"] {
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    position: relative;
+}
+
+.card-img-top[src*="default.png"]::after {
+    content: "📷";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    opacity: 0.5;
+    pointer-events: none;
+} 

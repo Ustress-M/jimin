@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- 검색창 -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <form action="{{ url_for('search') }}" method="GET" class="d-flex">
+                    <input type="text" name="q" class="form-control me-2" placeholder="분실물을 검색해보세요...">
+                    <button type="submit" class="btn btn-primary">검색</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 최근 습득된 분실물 -->
+        <div class="row">
+            <div class="col-12">
+                <h3 class="text-center mb-3">최근 습득된 분실물</h3>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            {% for item in recent_found %}
+            <div class="col-md-4 mb-3">
+                <div class="card item-card" style="width: 100%; position: relative;">
+                    <!-- 상태 표시 원 -->
+                    <div class="status-indicator" 
+                         style="position: absolute; top: 10px; left: 10px; width: 20px; height: 20px; border-radius: 50%; 
+                                background-color: {% if item.status == 'completed' %}#000000
+                                {% elif item.status == 'claimed' %}#dc3545
+                                {% else %}#007bff{% endif %}; 
+                                z-index: 10;"></div>
+                    <img src="{{ url_for('static', filename='uploads/' + item.image) }}" 
+                         class="card-img-top" alt="{{ item.name }}"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">{{ item.name }}</h5>
+                        <div class="item-info" style="display: none;">
+                            <p class="card-text"><strong>습득 장소:</strong> {{ item.location }}</p>
+                            <p class="card-text"><strong>습득 시간:</strong> {{ item.found_time }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if not recent_found %}
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="text-muted">아직 습득된 분실물이 없습니다.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 
